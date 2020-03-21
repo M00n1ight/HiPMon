@@ -1,0 +1,37 @@
+#navBlock {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(auto, 300px));
+  grid-template-rows: 1fr;
+  justify-content: center;
+  align-content: space-between;
+  border-bottom: 1px solid #aaa;
+}
+
+.menuItem {
+  display: inline-block;
+  text-align: center;
+  padding: 10px 0px;
+  margin: 10px;
+  border: 1px solid #FFF;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px 1px rgba(100, 100, 100, 0.294);
+}
+
+.menuItem:hover {
+  border-color: red;
+  box-shadow: 0px 5px 10px 3px rgba(100, 100, 100, 0.294);
+}
+
+.menuItem[class*='myActive'] {
+  color: red ! important;
+}
+
+.menuItem:visited {
+  color: blue;
+}
+
+A {
+  text-decoration: none;
+}

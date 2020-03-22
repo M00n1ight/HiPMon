@@ -1,4 +1,13 @@
 <div class="example-container mat-elevation-z8">
+  <div class="input-wrapper">
+    <div style="text-align: center; margin-bottom: 10px">
+      <span>Time range</span>
+    </div>
+    <input [(ngModel)]="selectedMoments" [selectMode]="'range'"
+           [owlDateTimeTrigger]="dtPicker3" [owlDateTime]="dtPicker3"
+           (ngModelChange)="log()">
+    <owl-date-time #dtPicker3></owl-date-time>
+  </div>
   <table mat-table [dataSource]="dataSource">
 
     <!-- Position Column -->
@@ -26,6 +35,6 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"  style="height: 80px"></tr>
   </table>
 </div>

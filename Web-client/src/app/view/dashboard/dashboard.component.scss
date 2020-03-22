@@ -4,7 +4,7 @@
 }
 
 .settings {
-  height: 20%;
+  height: 15%;
   min-height: 100px;
 
 }
@@ -23,7 +23,7 @@ label {
   color: darkgrey !important;
 }
 
-.horizontalfixed {
+.fixed {
   overflow: inherit !important;
 }
 
@@ -31,8 +31,12 @@ label {
   margin: auto;
 }
 
+gridster-item {
+  box-shadow: 0.4em 0.4em 5px rgba(122,122,122,0.5);
+}
+
 input {
-  width: 300px;
+  width: 260px;
   font-size: 13px;
   padding: 6px 0 4px 10px;
   border: 1px solid #cecece;

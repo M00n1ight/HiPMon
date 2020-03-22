@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Group} from '../settings/sensors-group.component';
+import {ApiService} from '../../services/api.service';
+import {HistoryService} from './history.service';
 
 @Component({
   selector: 'app-history',
@@ -7,52 +10,38 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HistoryComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private historyService: HistoryService
+  ) {
+  }
 
-  displayedColumns = ['timestamp', 'sensorId', 'newBottomThreshold', 'newTopThreshold'];
-  dataSource: History[] = [
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-    {id: '1', timestamp: new Date().toLocaleDateString(), sensorId: 'sdfsdsd', newBottomThreshold: '1.0079', newTopThreshold: 'H'},
-  ];
-  public selectedMoments = [new Date(), new Date()];
+  displayedColumns = ['timestamp', 'type', 'modification'];
+  dataSource: History[] = [];
+  public selectedMoments = [new Date('2020.03.22'), new Date()];
 
   log() {
-    console.log(this.selectedMoments)
+    this.ngOnInit();
+    console.log(this.selectedMoments);
   }
 
   ngOnInit(): void {
+    this.getData();
+    this.dataSource.forEach((elem) => {
+      elem.timestamp = new Date(elem.timestamp);
+    });
+    console.log(this.dataSource);
   }
 
+  getData(): any {
+    this.historyService.get().subscribe((data: any[]) => {
+      this.dataSource = data;
+
+      this.dataSource.forEach((elem) => {
+        elem.timestamp = new Date(elem.timestamp).toLocaleString();
+      });
+      console.log(this.dataSource);
+    });
+  }
 }
 
 export interface History {

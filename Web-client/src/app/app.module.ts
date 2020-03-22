@@ -23,7 +23,14 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { SensorsComponent } from './view/settings/sensors/sensors.component';
 import { HttpClientModule } from '@angular/common/http';
 import {ApiService} from './services/api.service';
+import {MatButtonModule} from '@angular/material/button';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 
 
 @NgModule({
@@ -53,11 +60,17 @@ import {ApiService} from './services/api.service';
     OwlNativeDateTimeModule,
     MatTableModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    MatButtonModule,
+    PerfectScrollbarModule
 
   ],
   providers: [
-    ApiService
+    ApiService,
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }
   ],
   bootstrap: [AppComponent]
 })

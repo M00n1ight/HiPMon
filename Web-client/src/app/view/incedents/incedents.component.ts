@@ -17,6 +17,12 @@ export class IncedentsComponent implements OnInit {
 
   displayedColumns = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
+
+  public selectedMoments = [new Date(), new Date()];
+
+  log() {
+    console.log(this.selectedMoments);
+  }
   ngOnInit(): void {
   }
 

@@ -5,6 +5,7 @@ import {Group} from '../sensors-group.component';
 import {Router} from '@angular/router';
 import {ApiService} from '../../../services/api.service';
 import {ActivatedRoute} from '@angular/router';
+import {SensorsService} from '../sensors.service';
 
 export interface Sensors {
   id: string;
@@ -23,12 +24,11 @@ export interface Sensors {
 export class SensorsComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
-              private api: ApiService,
+              private api: SensorsService,
               private route: ActivatedRoute) {}
 
-  displayedColumns = ['name', 'type', 'bottomThreshold', 'topThreshold'];
+  displayedColumns = ['name', 'id', 'bottomThreshold', 'topThreshold'];
   dataSource: Sensors[] = [
-    {id: '1', name: 'Hydrogen', type: 'testType', bottomThreshold: '20', topThreshold: '10'},
   ];
  id: string;
   ngOnInit(): void {
@@ -36,20 +36,19 @@ export class SensorsComponent implements OnInit {
     this.route.paramMap.subscribe( paramMap => {
       this.id = paramMap.get('id');
     });
+    this.getData();
   }
 
   getData(): any {
-    this.api.get('/sensors').subscribe((data: any) => {
-      this.dataSource = data.filter((elem) => {
-        return (elem.group.id === this.id);
-      });
+    this.api.getSensors('groupId=' + this.id).subscribe((data: any) => {
+      this.dataSource = data;
     });
   }
 
   openDialog(elem: any): void {
     const dialogRef = this.dialog.open(ModalFromSensorComponent, {
       width: '250px',
-      data: {name: 'this.name', animal: 'this.animal'}
+      data: elem
     });
 
     dialogRef.afterClosed().subscribe(result => {

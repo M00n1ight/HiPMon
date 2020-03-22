@@ -19,6 +19,7 @@ export class GraphsComponent implements OnInit {
     {
       data: [ 65, 59, 80, 81, 65],
       label: 'Series A',
+      backgroundColor: 'deepskyblue'
     },
   ];
   public lineChartLabels: Label[] = ['1', '2', '3', '4', '1'];

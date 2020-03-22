@@ -1,12 +1,20 @@
-<h1 mat-dialog-title>Hi {{data.name}}</h1>
+<h1 mat-dialog-title>Sensor: {{data.name}}</h1>
 <div mat-dialog-content>
-  <p>What's your favorite animal?</p>
+  <p>Edit range</p>
   <mat-form-field>
-    <mat-label>Favorite Animal</mat-label>
-    <input matInput [(ngModel)]="data.animal">
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="data.name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>TopThreshold</mat-label>
+    <input matInput [(ngModel)]="data.topThreshold">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>BottomThreshold</mat-label>
+    <input matInput [(ngModel)]="data.bottomThreshold">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" (click)="onYesClick()" cdkFocusInitial>Ok</button>
 </div>

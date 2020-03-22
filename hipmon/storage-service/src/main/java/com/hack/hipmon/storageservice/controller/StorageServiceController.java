@@ -20,11 +20,11 @@ public class StorageServiceController {
     @Autowired
     private DataRepo repo;
 
-    @GetMapping("/data")
+    @GetMapping("/route/data")
     public List<Data> get(
             @RequestParam(name="id",    required = false) ArrayList<Integer> idS,
-            @RequestParam(name="start", required = false) Long startTimestamp,
-            @RequestParam(name="end",   required = false) Long endTimestamp    ) throws SQLException {
+            @RequestParam(name="start", required = false) Double startTimestamp,
+            @RequestParam(name="end",   required = false) Double endTimestamp    ) throws SQLException {
 
         return repo.get(idS, startTimestamp, endTimestamp);
     }

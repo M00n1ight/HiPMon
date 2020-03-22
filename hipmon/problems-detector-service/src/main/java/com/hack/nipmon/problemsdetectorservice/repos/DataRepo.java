@@ -1,15 +1,13 @@
-package com.hack.hipmon.storageservice.repos;
+package com.hack.nipmon.problemsdetectorservice.repos;
 
-import com.hack.hipmon.storageservice.domain.Data;
+import com.hack.nipmon.problemsdetectorservice.domain.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
-import ru.yandex.clickhouse.ClickHouseConnection;
 
 import java.sql.*;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +15,7 @@ import java.util.stream.Stream;
 
 @Repository
 public class DataRepo {
+
     Logger logger = LoggerFactory.getLogger(DataRepo.class);
 
     private static final String SENSOR_ID = "sensor_id";
@@ -24,8 +23,8 @@ public class DataRepo {
     //private static final String TIMESTAMP = "CreationDate";
     private static final String TIMESTAMP = "timestamp";
 
-    private static final String selectAll = "SELECT * FROM Data" ;
-    private static final String INSERT = new StringBuilder("INSERT INTO Data (")
+    private static final String selectAll = "SELECT * FROM Problems" ;
+    private static final String INSERT = new StringBuilder("INSERT INTO Problems (")
             .append(TIMESTAMP).append(", ").append(SENSOR_ID).append(", ").append(VALUE)
             .append(") FORMAT Values").toString();
 
@@ -113,9 +112,8 @@ public class DataRepo {
     }
 
     public int put(List<Data> data) throws SQLException {
-        if (data != null && !data.isEmpty()) {
+        if(!data.isEmpty()) {
             try (Connection connection = DriverManager.getConnection(url, user, password)) {
-                Instant instant;
                 StringBuilder query = new StringBuilder(INSERT);
                 for (Data record : data) {
                     logger.error("Time " + record.getTimestamp());
@@ -126,6 +124,7 @@ public class DataRepo {
                 }
                 query.delete(query.length() - 1, query.length());
 
+                logger.error("Insert Query " + query.toString());
                 return connection.createStatement().executeUpdate(query.toString());
             }
         }

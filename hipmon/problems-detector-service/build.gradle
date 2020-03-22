@@ -24,6 +24,7 @@ ext {
 }
 
 dependencies {
+    compile group: 'ru.yandex.clickhouse', name: 'clickhouse-jdbc', version: '0.2.4'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

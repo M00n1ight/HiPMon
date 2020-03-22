@@ -26,9 +26,8 @@ export class SensorsComponent implements OnInit {
               private api: ApiService,
               private route: ActivatedRoute) {}
 
-  displayedColumns = ['name', 'type', 'bottomThreshold', 'topThreshold'];
+  displayedColumns = ['name', 'id', 'bottomThreshold', 'topThreshold'];
   dataSource: Sensors[] = [
-    {id: '1', name: 'Hydrogen', type: 'testType', bottomThreshold: '20', topThreshold: '10'},
   ];
  id: string;
   ngOnInit(): void {
@@ -36,20 +35,19 @@ export class SensorsComponent implements OnInit {
     this.route.paramMap.subscribe( paramMap => {
       this.id = paramMap.get('id');
     });
+    this.getData();
   }
 
   getData(): any {
-    this.api.get('/sensors').subscribe((data: any) => {
-      this.dataSource = data.filter((elem) => {
-        return (elem.group.id === this.id);
-      });
+    this.api.get('http://25.104.118.61:8110/sensors?groupId=' + this.id).subscribe((data: any) => {
+      this.dataSource = data;
     });
   }
 
   openDialog(elem: any): void {
     const dialogRef = this.dialog.open(ModalFromSensorComponent, {
       width: '250px',
-      data: {name: 'this.name', animal: 'this.animal'}
+      data: elem
     });
 
     dialogRef.afterClosed().subscribe(result => {

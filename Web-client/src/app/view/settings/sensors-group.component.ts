@@ -17,9 +17,9 @@ export class SensorsGroupComponent implements OnInit {
 
   displayedColumns = ['id', 'name'];
   dataSource: Group[] = [
-    {id: '1', name: 'TEST'},
   ];
   ngOnInit(): void {
+    this.getData();
   }
 
   goToGroup(elem: Group): void {
@@ -27,7 +27,7 @@ export class SensorsGroupComponent implements OnInit {
   }
 
   getData(): any {
-    this.api.get('/sensors/groups').subscribe((data: Group[]) => {
+    this.api.get('http://25.104.118.61:8110/sensors/groups').subscribe((data: Group[]) => {
       this.dataSource = data;
     });
   }

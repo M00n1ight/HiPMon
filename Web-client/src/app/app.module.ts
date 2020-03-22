@@ -23,6 +23,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { SensorsComponent } from './view/settings/sensors/sensors.component';
 import { HttpClientModule } from '@angular/common/http';
 import {ApiService} from './services/api.service';
+import {MatButtonModule} from '@angular/material/button';
 
 
 
@@ -53,7 +54,8 @@ import {ApiService} from './services/api.service';
     OwlNativeDateTimeModule,
     MatTableModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    MatButtonModule
 
   ],
   providers: [

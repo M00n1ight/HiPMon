@@ -71,25 +71,21 @@ export class DashboardComponent implements OnInit {
     scrollToNewItems: false
   };
 
-  dashboard = [
+   dashboard = [
     {cols: 10, rows: 5, y: 0, x: 0},
     {cols: 10, rows: 5, y: 0, x: 2},
     {cols: 10, rows: 5, y: 0, x: 4},
     {cols: 10, rows: 5, y: 2, x: 5},
   ];
 
-
-  title = 'date-time-range-picker';
-  startDate: string; // start date will be stored here
-  endDate: string; // end date will be stored here
-
   public selectedMoments = [new Date(), new Date()];
 
-  log() {
-    console.log(this.selectedMoments)
+  update() {
+    console.log(this.selectedMoments);
   }
 
   ngOnInit(): void {
   }
+
 
 }

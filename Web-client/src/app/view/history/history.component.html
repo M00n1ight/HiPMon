@@ -5,35 +5,29 @@
     </div>
     <input [(ngModel)]="selectedMoments" [selectMode]="'range'"
            [owlDateTimeTrigger]="dtPicker3" [owlDateTime]="dtPicker3"
-           (ngModelChange)="log()"
-           style="width: 250px">
+           (ngModelChange)="log()">
     <owl-date-time #dtPicker3></owl-date-time>
   </div>
-  <table mat-table [dataSource]="dataSource" perfectScrollBar>
+  <table mat-table [dataSource]="dataSource">
 
     <!-- Position Column -->
     <ng-container matColumnDef="timestamp">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
+      <th mat-header-cell *matHeaderCellDef> Time </th>
       <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container matColumnDef="sensorId">
-      <th mat-header-cell *matHeaderCellDef> sensorId </th>
-      <td mat-cell *matCellDef="let element"> {{element.sensorId}} </td>
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef> type </th>
+      <td mat-cell *matCellDef="let element"> {{element.type}} </td>
     </ng-container>
 
     <!-- Weight Column -->
-    <ng-container matColumnDef="newBottomThreshold">
-      <th mat-header-cell *matHeaderCellDef> newBottomThreshold </th>
-      <td mat-cell *matCellDef="let element"> {{element.newBottomThreshold}} </td>
+    <ng-container matColumnDef="modification">
+      <th mat-header-cell *matHeaderCellDef> modification </th>
+      <td mat-cell *matCellDef="let element"> {{element.modification}} </td>
     </ng-container>
 
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="newTopThreshold">
-      <th mat-header-cell *matHeaderCellDef> newTopThreshold </th>
-      <td mat-cell *matCellDef="let element"> {{element.newTopThreshold}} </td>
-    </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

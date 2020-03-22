@@ -2,6 +2,8 @@ import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@an
 import {CompactType, DisplayGrid, GridType} from 'angular-gridster2';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {DateTimeAdapter} from '@danielmoncada/angular-datetime-picker';
+import {DashboardService} from './dashboard.service';
+import {SensorsService} from '../settings/sensors.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,9 +15,14 @@ import {DateTimeAdapter} from '@danielmoncada/angular-datetime-picker';
 
 export class DashboardComponent implements OnInit {
 
-  constructor() {
+  constructor(
+    private dashboardService: DashboardService,
+    private sensorsService: SensorsService
+  ) {
   }
 
+  selectOptions = [
+  ];
   options = {
     gridType: GridType.Fixed,
     compactType: CompactType.None,
@@ -72,10 +79,10 @@ export class DashboardComponent implements OnInit {
   };
 
    dashboard = [
-    {cols: 10, rows: 5, y: 0, x: 0},
-    {cols: 10, rows: 5, y: 0, x: 2},
-    {cols: 10, rows: 5, y: 0, x: 4},
-    {cols: 10, rows: 5, y: 2, x: 5},
+    {cols: 10, rows: 5, y: 0, x: 0, name: '1'},
+    {cols: 10, rows: 5, y: 0, x: 2, name: '2'},
+    {cols: 10, rows: 5, y: 0, x: 4, name: '3'},
+    {cols: 10, rows: 5, y: 2, x: 5, name: '4'},
   ];
 
   public selectedMoments = [new Date(), new Date()];
@@ -85,6 +92,14 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initGroupSelector();
+  }
+
+  initGroupSelector(): void {
+    console.log(123);
+    this.sensorsService.getGroups().subscribe((data) => {
+      this.selectOptions = data;
+    });
   }
 
 

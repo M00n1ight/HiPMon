@@ -112,19 +112,23 @@ public class DataRepo {
     }
 
     public int put(List<Data> data) throws SQLException {
-        try(Connection connection = DriverManager.getConnection(url, user, password)){
-            StringBuilder query = new StringBuilder(INSERT);
-            for (Data record : data) {
-                logger.error("Time " + record.getTimestamp());
-                query
-                        .append("('").append(record.getTimestamp()).append("',")
-                        .append(record.getId()).append(',')
-                        .append(record.getValue()).append(')').append(',');
-            }
-            query.delete(query.length()-1, query.length());
+        if(!data.isEmpty()) {
+            try (Connection connection = DriverManager.getConnection(url, user, password)) {
+                StringBuilder query = new StringBuilder(INSERT);
+                for (Data record : data) {
+                    logger.error("Time " + record.getTimestamp());
+                    query
+                            .append("('").append(record.getTimestamp()).append("',")
+                            .append(record.getId()).append(',')
+                            .append(record.getValue()).append(')').append(',');
+                }
+                query.delete(query.length() - 1, query.length());
 
-            return connection.createStatement().executeUpdate(query.toString());
+                logger.error("Insert Query " + query.toString());
+                return connection.createStatement().executeUpdate(query.toString());
+            }
         }
+        return 0;
     }
 
     /* CLICKHOUSE Batch doesn't work(

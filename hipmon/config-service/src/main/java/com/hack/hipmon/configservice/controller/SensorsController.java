@@ -27,8 +27,11 @@ public class SensorsController {
     private Client client;
 
     @GetMapping("/sensors")
-    public List<Sensor> getSensors() {
+    public List<Sensor> getSensors(@RequestParam(required = false) Integer groupId) {
         try {
+            if (groupId != null) {
+                return sensorsStorage.getByGroupId(groupId);
+            }
             return sensorsStorage.getAll();
         } catch (SQLException e) {
             e.printStackTrace();

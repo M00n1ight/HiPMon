@@ -39,13 +39,25 @@ FOREIGN KEY(type) REFERENCES sensorTypes(id));
         return sensors;
     }
 
+    public List<Sensor> getByGroupId(Integer groupId) throws SQLException {
+        List<Sensor> sensors = new LinkedList<>();
+
+        ResultSet resultSet = queryExecutor.executeQuery("SELECT * FROM sensors AS ss LEFT JOIN groups AS g ON ss.groupId = g.id LEFT JOIN sensorTypes AS s ON ss.type = s.id WHERE groupId = " + groupId + ";");
+
+        while (resultSet.next()) {
+            sensors.add(wrapSensor(resultSet));
+        }
+
+        return sensors;
+    }
+
     public void updateSensor(Sensor sensor) throws SQLException {
         queryExecutor.execute("UPDATE sensors SET " +
-                "name='" + "'," +
-                "type='" + "'," +
-                "groupId='" + "'," +
-                "bottomThreshold='" + "'," +
-                "topThreshold='" + "' " +
+                "name='" + sensor.getName() + "'," +
+                "type='" + sensor.getType().getId() + "'," +
+                "groupId='" + sensor.getGroup().getId() + "'," +
+                "bottomThreshold='" + sensor.getBottomThreshold() + "'," +
+                "topThreshold='" + sensor.getTopThreshold() + "' " +
                 "WHERE id = " + sensor.getId() + ";");
     }
 

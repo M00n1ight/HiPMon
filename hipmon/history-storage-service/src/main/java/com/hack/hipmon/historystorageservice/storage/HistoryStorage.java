@@ -25,6 +25,18 @@ public class HistoryStorage {
 
     }
 
+    public List<ModificationRecord> get(Long from, Long to) throws SQLException {
+        List<ModificationRecord> records = new LinkedList<>();
+
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM history WHERE timestamp >= " + from + " AND timestamp <= " + to + ";");
+
+        while (resultSet.next()) {
+            records.add(wrapModificationRecord(resultSet));
+        }
+
+        return records;
+    }
+
     public List<ModificationRecord> getAll() throws SQLException {
         List<ModificationRecord> records = new LinkedList<>();
 

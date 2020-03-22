@@ -1,0 +1,16 @@
+zuul:
+  prefix: /sensors/**
+  strip-prefix: true
+  routes:
+    storage-service:
+      path: /route/**
+      serviceId: storage-service
+    problems-detector-service:
+      path: /problems/**
+      serviceId: problems-detector-service
+    sensors-storage-service:
+      path: /sensors/**
+      service-id: sensors-storage-service
+    history-storage-service:
+      path: /history/**
+      service-id: history-storage-service

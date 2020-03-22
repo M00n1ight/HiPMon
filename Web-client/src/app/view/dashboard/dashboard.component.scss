@@ -2,3 +2,41 @@
   display: block;
   height: 90vh;
 }
+
+.settings {
+  height: 20%;
+  min-height: 100px;
+
+}
+
+/* Border */
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: darkgrey;
+}
+/* Font color */
+input.mat-input-element {
+  color: darkgrey;
+
+}
+
+label {
+  color: darkgrey !important;
+}
+
+.horizontalfixed {
+  overflow: inherit !important;
+}
+
+.example-container {
+  margin: auto;
+}
+
+input {
+  width: 300px;
+  font-size: 13px;
+  padding: 6px 0 4px 10px;
+  border: 1px solid #cecece;
+  background: #F6F6f6;
+  border-radius: 8px;
+  cursor: pointer;
+}

@@ -8,21 +8,57 @@ import { HeaderComponent } from './frames/header/header.component';
 import {ChartsModule} from 'ng2-charts';
 import { DashboardComponent } from './view/dashboard/dashboard.component';
 import {GridsterModule} from 'angular-gridster2';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {OWL_DATE_TIME_LOCALE, OwlDateTimeModule, OwlNativeDateTimeModule} from '@danielmoncada/angular-datetime-picker';
+import { HistoryComponent } from './view/history/history.component';
+import { SensorsGroupComponent } from './view/settings/sensors-group.component';
+import { IncedentsComponent } from './view/incedents/incedents.component';
+import {MatTableModule} from '@angular/material/table';
+import { ModalFromSensorComponent } from './view/settings/modal-from-sensor/modal-from-sensor.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { SensorsComponent } from './view/settings/sensors/sensors.component';
+import { HttpClientModule } from '@angular/common/http';
+import {ApiService} from './services/api.service';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     GraphsComponent,
     HeaderComponent,
-    DashboardComponent
+    DashboardComponent,
+    HistoryComponent,
+    SensorsGroupComponent,
+    IncedentsComponent,
+    ModalFromSensorComponent,
+    SensorsComponent,
   ],
   imports: [
     GridsterModule,
     BrowserModule,
     AppRoutingModule,
-    ChartsModule
+    ChartsModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    MatTableModule,
+    MatDialogModule,
+    HttpClientModule
+
   ],
-  providers: [],
+  providers: [
+    ApiService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

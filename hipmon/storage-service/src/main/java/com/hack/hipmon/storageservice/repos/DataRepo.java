@@ -12,25 +12,25 @@ import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class DataRepo {
-    Logger logger = LoggerFactory.getLogger(DataRepo.class);
-
     private static final String SENSOR_ID = "sensor_id";
     private static final String VALUE = "value";
-    private static final String TIMESTAMP = "CreationDate";
-
-    private Environment env;
-
-    private ClickHouseConnection connection;
-
+    //private static final String TIMESTAMP = "CreationDate";
+    private static final String TIMESTAMP = "timestamp";
+    private static final String selectAll = "SELECT * FROM Data" ;
+    private static final String INSERT = new StringBuilder("INSERT INTO Data (")
+            .append(TIMESTAMP).append(", ").append(SENSOR_ID).append(", ").append(VALUE)
+            .append(") FORMAT Values").toString();
     private final String url;
     private final String user;
     private final String password;
-
-    private static final String selectAll = "SELECT * FROM Data" ;
-
+    Logger logger = LoggerFactory.getLogger(DataRepo.class);
+    private Environment env;
+    private ClickHouseConnection connection;
 
     @Autowired
     public DataRepo(Environment env){
@@ -43,7 +43,73 @@ public class DataRepo {
         password = env.getProperty("spring.datasource.password");
     }
 
+    public List<Data> get(List<Integer> idS, Long startTimestamp, Long endTimestamp) throws SQLException{
 
+        String query = prepareSelectStatement(idS, startTimestamp, endTimestamp);
+
+        ResultSet resultSet;
+        try (Connection connection = DriverManager.getConnection(url, user, password)){
+            resultSet = connection.createStatement().executeQuery(query);
+        }
+
+        List<Data> result = new ArrayList<>();
+
+        while(resultSet.next()){
+            result.add(
+                    new Data(
+                            resultSet.getInt(SENSOR_ID),
+                            resultSet.getFloat(VALUE),
+                            resultSet.getTimestamp(TIMESTAMP)
+                    )
+            );
+        }
+
+        return result;
+
+    }
+
+    private String prepareSelectStatement(List<Integer> idS, Long startTimestamp, Long endTimestamp) {
+        StringBuilder idQuery = new StringBuilder();
+        StringBuilder startTimestampQuery = new StringBuilder();
+        StringBuilder endTimestampQuery = new StringBuilder();
+
+        if(idS != null && !idS.isEmpty()){
+            // sensor_id in (v1, ..., vN)
+            logger.error("idS size " + idS.size());
+            idQuery.append(SENSOR_ID).append(" in (")
+                    .append(idS.stream().map(i->i.toString()).collect(Collectors.joining(", ")))
+                    .append(')');
+        }
+
+        logger.error("Id " + idQuery.toString());
+
+        if(startTimestamp != null){
+            // CreateTime >= toDateTime('startTimestamp')
+            startTimestampQuery.append(TIMESTAMP).append(" >= toDateTime(").append(startTimestamp).append(')');
+        }
+        logger.error("start " + startTimestampQuery.toString());
+
+        if(endTimestamp != null){
+            // CreateTime <= toDateTime('endTimestamp')
+            endTimestampQuery.append(TIMESTAMP).append(" <= toDateTime(").append(endTimestamp).append(')');
+        }
+        logger.error("end " + endTimestampQuery.toString());
+
+        String filter = Stream.of(idQuery, startTimestampQuery, endTimestampQuery)
+                .filter(i -> i != null && !i.toString().isBlank())
+                .collect(Collectors.joining(" AND "));
+
+        logger.error("Filter " + filter);
+
+        StringBuilder query = new StringBuilder(selectAll);
+        if(!filter.isBlank())
+            query.append(" WHERE ").append(filter);
+
+
+        logger.error("Req " + query);
+
+        return query.toString();
+    }
 
     public List<Data> getAll() throws SQLException {
 
@@ -69,14 +135,14 @@ public class DataRepo {
         return result;
     }
 
-    private static final String INSERT = "INSERT INTO Data (CreationDate, sensor_id, value) FORMAT Values ";
     public int put(List<Data> data) throws SQLException {
         try(Connection connection = DriverManager.getConnection(url, user, password)){
             Instant instant;
             StringBuilder query = new StringBuilder(INSERT);
             for (Data record : data) {
+                logger.error("Time " + record.getTimestamp());
                 query
-                        .append("('").append(record.getTimestamp().getTime()).append("',")
+                        .append("('").append(record.getTimestamp()).append("',")
                         .append(record.getId()).append(',')
                         .append(record.getValue()).append(')').append(',');
             }

@@ -3,36 +3,33 @@ package com.hack.hipmon.storageservice.controller;
 import com.google.common.collect.ImmutableMap;
 import com.hack.hipmon.storageservice.domain.Data;
 import com.hack.hipmon.storageservice.repos.DataRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 public class StorageServiceController {
+    Logger logger = LoggerFactory.getLogger(StorageServiceController.class);
 
     @Autowired
     private DataRepo repo;
 
-    @GetMapping("/get")
+    @GetMapping("/data")
     public List<Data> get(
-            /*@RequestParam(required = false) Integer id,
-            @RequestParam(required = false) Long startTimestamp,
-            @RequestParam(required = false) Long endTimestamp*/
-    ) throws SQLException {
+            @RequestParam(name="id",    required = false) ArrayList<Integer> idS,
+            @RequestParam(name="start", required = false) Long startTimestamp,
+            @RequestParam(name="end",   required = false) Long endTimestamp    ) throws SQLException {
 
-        return repo.getAll();
+        return repo.get(idS, startTimestamp, endTimestamp);
     }
 
-    /*@GetMapping("/get")
-    public List<Data> get(@RequestParam String k) throws SQLException {
-
-        return new ArrayList<>();
-    }*/
-
-    @PostMapping("/insert")
+    @PostMapping("/route/data")
     public Map<Object, Object> post(@RequestBody List<Data> body) throws SQLException {
         repo.put(body);
         return successResponse;

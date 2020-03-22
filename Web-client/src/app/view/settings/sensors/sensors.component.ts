@@ -5,6 +5,7 @@ import {Group} from '../sensors-group.component';
 import {Router} from '@angular/router';
 import {ApiService} from '../../../services/api.service';
 import {ActivatedRoute} from '@angular/router';
+import {SensorsService} from '../sensors.service';
 
 export interface Sensors {
   id: string;
@@ -23,7 +24,7 @@ export interface Sensors {
 export class SensorsComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
-              private api: ApiService,
+              private api: SensorsService,
               private route: ActivatedRoute) {}
 
   displayedColumns = ['name', 'id', 'bottomThreshold', 'topThreshold'];
@@ -39,7 +40,7 @@ export class SensorsComponent implements OnInit {
   }
 
   getData(): any {
-    this.api.get('http://25.104.118.61:8110/sensors?groupId=' + this.id).subscribe((data: any) => {
+    this.api.getSensors('groupId=' + this.id).subscribe((data: any) => {
       this.dataSource = data;
     });
   }

@@ -3,6 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ModalFromSensorComponent} from './modal-from-sensor/modal-from-sensor.component';
 import {Router} from '@angular/router';
 import {ApiService} from '../../services/api.service';
+import {SensorsService} from './sensors.service';
 
 @Component({
   selector: 'app-settings',
@@ -13,7 +14,7 @@ export class SensorsGroupComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
               private router: Router,
-              private api: ApiService) {}
+              private api: SensorsService) {}
 
   displayedColumns = ['id', 'name'];
   dataSource: Group[] = [
@@ -27,7 +28,7 @@ export class SensorsGroupComponent implements OnInit {
   }
 
   getData(): any {
-    this.api.get('http://25.104.118.61:8110/sensors/groups').subscribe((data: Group[]) => {
+    this.api.getGroups().subscribe((data: Group[]) => {
       this.dataSource = data;
     });
   }

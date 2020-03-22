@@ -11,7 +11,7 @@ public class TypesStorage {
     private Connection connection;
     private Statement statement;
 
-    private static final String dbFile = "sensorTypes.s3db";
+    private static final String dbFile = "sensors.s3db";
 
     public TypesStorage() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");

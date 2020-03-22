@@ -11,7 +11,7 @@ public class GroupsStorage {
     private Connection connection;
     private Statement statement;
 
-    private static final String dbFile = "groups.s3db";
+    private static final String dbFile = "sensors.s3db";
 
     public GroupsStorage() throws ClassNotFoundException, SQLException {
 

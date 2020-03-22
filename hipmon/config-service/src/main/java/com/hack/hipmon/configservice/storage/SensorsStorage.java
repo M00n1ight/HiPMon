@@ -34,7 +34,7 @@ public class SensorsStorage {
     public List<Sensor> getAll() throws SQLException {
         List<Sensor> sensors = new LinkedList<>();
 
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM sensors");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM sensors as ss INNER JOIN groups AS g ON ss.groupId = g.id INNER JOIN sensorTypes AS s ON ss.type = s.id");
 
         while (resultSet.next()) {
             sensors.add(wrapSensor(resultSet));
@@ -63,11 +63,11 @@ public class SensorsStorage {
     }
 
     private Sensor wrapSensor(ResultSet resultSet) throws SQLException {
-        return new Sensor(resultSet.getInt("id"),
-                resultSet.getString("name"),
-                new SensorType(resultSet.getInt("type"), resultSet.getString("t.name")),
-                new Group(resultSet.getInt("groupId"), resultSet.getString("g.name")),
-                resultSet.getFloat("topThreshold"),
-                resultSet.getFloat("bottomThreshold"));
+        return new Sensor(resultSet.getInt("ss.id"),
+                resultSet.getString("ss.name"),
+                new SensorType(resultSet.getInt("ss.type"), resultSet.getString("t.name")),
+                new Group(resultSet.getInt("ss.groupId"), resultSet.getString("g.name")),
+                resultSet.getFloat("ss.topThreshold"),
+                resultSet.getFloat("ss.bottomThreshold"));
     }
 }

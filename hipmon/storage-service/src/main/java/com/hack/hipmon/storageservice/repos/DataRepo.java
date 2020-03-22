@@ -112,30 +112,6 @@ public class DataRepo {
         return query.toString();
     }
 
-    public List<Data> getAll() throws SQLException {
-
-        Connection connection = DriverManager.getConnection(url, user, password);
-
-        Statement statement = connection.createStatement();
-
-        ResultSet rs = statement.executeQuery(selectAll);
-
-        List<Data> result = new ArrayList<>();
-
-        while(rs.next()){
-            result.add(
-                    new Data(
-                            rs.getInt(SENSOR_ID),
-                            rs.getFloat(VALUE),
-                            rs.getTimestamp(TIMESTAMP)
-                            //rs.getDate("CreationDate")
-                    )
-            );
-        }
-
-        return result;
-    }
-
     public int put(List<Data> data) throws SQLException {
         if (data != null && !data.isEmpty()) {
             try (Connection connection = DriverManager.getConnection(url, user, password)) {

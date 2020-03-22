@@ -24,14 +24,17 @@ ext {
 }
 
 dependencies {
-    compile group: 'ru.yandex.clickhouse', name: 'clickhouse-jdbc', version: '0.2.4'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.3'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    // SQLite3
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.7.2'
 }
 
 dependencyManagement {

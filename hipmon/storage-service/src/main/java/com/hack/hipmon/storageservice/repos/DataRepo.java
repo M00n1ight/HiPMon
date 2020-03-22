@@ -17,33 +17,34 @@ import java.util.stream.Stream;
 
 @Repository
 public class DataRepo {
+    Logger logger = LoggerFactory.getLogger(DataRepo.class);
+
     private static final String SENSOR_ID = "sensor_id";
     private static final String VALUE = "value";
     //private static final String TIMESTAMP = "CreationDate";
     private static final String TIMESTAMP = "timestamp";
+
     private static final String selectAll = "SELECT * FROM Data" ;
     private static final String INSERT = new StringBuilder("INSERT INTO Data (")
             .append(TIMESTAMP).append(", ").append(SENSOR_ID).append(", ").append(VALUE)
             .append(") FORMAT Values").toString();
+
     private final String url;
     private final String user;
     private final String password;
-    Logger logger = LoggerFactory.getLogger(DataRepo.class);
+
     private Environment env;
-    private ClickHouseConnection connection;
 
     @Autowired
     public DataRepo(Environment env){
         this.env = env;
-
-        logger.error("ENV is null? " + (env == null) );
 
         url = env.getProperty("spring.datasource.url");
         user = env.getProperty("spring.datasource.username");
         password = env.getProperty("spring.datasource.password");
     }
 
-    public List<Data> get(List<Integer> idS, Long startTimestamp, Long endTimestamp) throws SQLException{
+    public List<Data> get(List<Integer> idS, Double startTimestamp, Double endTimestamp) throws SQLException{
 
         String query = prepareSelectStatement(idS, startTimestamp, endTimestamp);
 
@@ -68,7 +69,7 @@ public class DataRepo {
 
     }
 
-    private String prepareSelectStatement(List<Integer> idS, Long startTimestamp, Long endTimestamp) {
+    private String prepareSelectStatement(List<Integer> idS, Double startTimestamp, Double endTimestamp) {
         StringBuilder idQuery = new StringBuilder();
         StringBuilder startTimestampQuery = new StringBuilder();
         StringBuilder endTimestampQuery = new StringBuilder();
@@ -85,13 +86,13 @@ public class DataRepo {
 
         if(startTimestamp != null){
             // CreateTime >= toDateTime('startTimestamp')
-            startTimestampQuery.append(TIMESTAMP).append(" >= toDateTime(").append(startTimestamp).append(')');
+            startTimestampQuery.append(TIMESTAMP).append(" >= toDateTime64(").append(startTimestamp).append(", 3)");
         }
         logger.error("start " + startTimestampQuery.toString());
 
         if(endTimestamp != null){
             // CreateTime <= toDateTime('endTimestamp')
-            endTimestampQuery.append(TIMESTAMP).append(" <= toDateTime(").append(endTimestamp).append(')');
+            endTimestampQuery.append(TIMESTAMP).append(" <= toDateTime64(").append(endTimestamp).append(", 3)");
         }
         logger.error("end " + endTimestampQuery.toString());
 
@@ -136,20 +137,23 @@ public class DataRepo {
     }
 
     public int put(List<Data> data) throws SQLException {
-        try(Connection connection = DriverManager.getConnection(url, user, password)){
-            Instant instant;
-            StringBuilder query = new StringBuilder(INSERT);
-            for (Data record : data) {
-                logger.error("Time " + record.getTimestamp());
-                query
-                        .append("('").append(record.getTimestamp()).append("',")
-                        .append(record.getId()).append(',')
-                        .append(record.getValue()).append(')').append(',');
-            }
-            query.delete(query.length()-1, query.length());
+        if (data != null && !data.isEmpty()) {
+            try (Connection connection = DriverManager.getConnection(url, user, password)) {
+                Instant instant;
+                StringBuilder query = new StringBuilder(INSERT);
+                for (Data record : data) {
+                    logger.error("Time " + record.getTimestamp());
+                    query
+                            .append("('").append(record.getTimestamp()).append("',")
+                            .append(record.getId()).append(',')
+                            .append(record.getValue()).append(')').append(',');
+                }
+                query.delete(query.length() - 1, query.length());
 
-            return connection.createStatement().executeUpdate(query.toString());
+                return connection.createStatement().executeUpdate(query.toString());
+            }
         }
+        return 0;
     }
 
     /* CLICKHOUSE Batch doesn't work(

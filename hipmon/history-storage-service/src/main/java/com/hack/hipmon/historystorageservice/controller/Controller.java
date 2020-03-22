@@ -28,21 +28,10 @@ public class Controller {
         }
     }
 
-    @PostMapping("/history/sensor")
-    public Response addModification(@RequestBody SensorModification sensorModification) {
+    @PostMapping("/history/add")
+    public Response addModification(@RequestBody ModificationRecord modificationRecord) {
         try {
-            historyStorage.createModification(sensorModification);
-            return new Response(true, "success");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new Response(false, e.getMessage());
-        }
-    }
-
-    @PostMapping("/history/group")
-    public Response addGroupModification(@RequestBody GroupModification groupModification) {
-        try {
-            historyStorage.createModification(groupModification);
+            historyStorage.createModification(modificationRecord);
             return new Response(true, "success");
         } catch (SQLException e) {
             e.printStackTrace();

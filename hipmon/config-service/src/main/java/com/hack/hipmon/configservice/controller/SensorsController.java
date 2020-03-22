@@ -1,5 +1,7 @@
 package com.hack.hipmon.configservice.controller;
 
+import com.hack.hipmon.configservice.Client;
+import com.hack.hipmon.configservice.data.ModificationRecord;
 import com.hack.hipmon.configservice.data.Response;
 import com.hack.hipmon.configservice.data.Sensor;
 import com.hack.hipmon.configservice.data.SensorType;
@@ -21,8 +23,11 @@ public class SensorsController {
     @Autowired
     private TypesStorage typesStorage;
 
+    @Autowired
+    private Client client;
+
     @GetMapping("/sensors")
-    public List<Sensor> getSensorsConfig() {
+    public List<Sensor> getSensors() {
         try {
             return sensorsStorage.getAll();
         } catch (SQLException e) {
@@ -31,25 +36,27 @@ public class SensorsController {
         }
     }
 
-    @PostMapping("/sensors/{id}")
-    public Response putSensor(@RequestBody Sensor sensor, @PathVariable(required = false) Integer id) {
-        if (id != null) {
-            sensor.setId(id);
-            try {
-                sensorsStorage.updateSensor(sensor);
-                return new Response(true, "success");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return new Response(false, e.getMessage());
-            }
-        } else {
-            try {
-                sensorsStorage.createSensor(sensor);
-                return new Response(true, "success");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return new Response(false, e.getMessage());
-            }
+    @PostMapping("/sensors/update")
+    public Response updateSensor(@RequestBody Sensor sensor) {
+        try {
+            sensorsStorage.updateSensor(sensor);
+            client.sendModificationRecord(new ModificationRecord(System.currentTimeMillis(),"update", sensor.toString()));
+            return new Response(true, "success");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Response(false, e.getMessage());
+        }
+    }
+
+    @PostMapping("/sensors/add")
+    public Response addSensor(@RequestBody Sensor sensor) {
+        try {
+            sensorsStorage.createSensor(sensor);
+            client.sendModificationRecord(new ModificationRecord(System.currentTimeMillis(),"create", sensor.toString()));
+            return new Response(true, "success");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Response(false, e.getMessage());
         }
     }
 

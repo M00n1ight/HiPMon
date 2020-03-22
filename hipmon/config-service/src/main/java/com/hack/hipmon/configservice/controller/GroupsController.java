@@ -26,25 +26,25 @@ public class GroupsController {
         }
     }
 
-    @PostMapping("/sensors/groups/{id}")
-    public Response putSensor(@RequestBody Group group, @PathVariable(required = false) Integer id) {
-        if (id != null) {
-            group.setId(id);
-            try {
-                groupsStorage.updateGroup(group);
-                return new Response(true, "success");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return new Response(false, e.getMessage());
-            }
-        } else {
-            try {
-                groupsStorage.createGroup(group);
-                return new Response(true, "success");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return new Response(false, e.getMessage());
-            }
+    @PostMapping("/sensors/groups/add")
+    public Response addSensor(@RequestBody Group group) {
+        try {
+            groupsStorage.createGroup(group);
+            return new Response(true, "success");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Response(false, e.getMessage());
+        }
+    }
+
+    @PostMapping("/sensors/groups/update")
+    public Response putSensor(@RequestBody Group group) {
+        try {
+            groupsStorage.updateGroup(group);
+            return new Response(true, "success");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Response(false, e.getMessage());
         }
     }
 

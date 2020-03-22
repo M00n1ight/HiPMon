@@ -3,6 +3,7 @@ package com.hack.hipmon.configservice.storage;
 import com.hack.hipmon.configservice.data.Group;
 import com.hack.hipmon.configservice.data.Sensor;
 import com.hack.hipmon.configservice.data.SensorType;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -11,30 +12,25 @@ import java.util.List;
 
 public class SensorsStorage {
 
-    private Connection connection;
-    private Statement statement;
 
-    private static final String dbFile = "sensors.s3db";
-
-    public SensorsStorage() throws SQLException, ClassNotFoundException {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
-
-            statement = connection.createStatement();
-            statement.execute("CREATE TABLE if not exists 'sensors' (" +
-                    "'id' INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "'name' text, " +
-                    "'type' INT, " +
-                    "'groupId' INT" +
-                    "'bottomThreshold' FLOAT, " +
-                    "'topThreshold' FLOAT);");
-
-        }
+    @Autowired
+    private QueryExecutor queryExecutor;
+/*
+CREATE TABLE if not exists 'sensors'
+('id' INTEGER PRIMARY KEY AUTOINCREMENT,
+'name' text,
+'type' INT,
+'groupId' INT,
+'bottomThreshold' FLOAT,
+'topThreshold' FLOAT,
+FOREIGN KEY(groupId) REFERENCES groups(id),
+FOREIGN KEY(type) REFERENCES sensorTypes(id));
+*/
 
     public List<Sensor> getAll() throws SQLException {
         List<Sensor> sensors = new LinkedList<>();
 
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM sensors as ss INNER JOIN groups AS g ON ss.groupId = g.id INNER JOIN sensorTypes AS s ON ss.type = s.id");
+        ResultSet resultSet = queryExecutor.executeQuery("SELECT * FROM sensors AS ss LEFT JOIN groups AS g ON ss.groupId = g.id LEFT JOIN sensorTypes AS s ON ss.type = s.id;");
 
         while (resultSet.next()) {
             sensors.add(wrapSensor(resultSet));
@@ -44,7 +40,7 @@ public class SensorsStorage {
     }
 
     public void updateSensor(Sensor sensor) throws SQLException {
-        statement.execute("UPDATE sensors SET " +
+        queryExecutor.execute("UPDATE sensors SET " +
                 "name='" + "'," +
                 "type='" + "'," +
                 "groupId='" + "'," +
@@ -54,20 +50,28 @@ public class SensorsStorage {
     }
 
     public void createSensor(Sensor sensor) throws SQLException {
-        statement.execute("INSERT INTO  sensors SET " +
-                "name='" + sensor.getName() + "'," +
-                "type='" + sensor.getType().getId() + "'," +
-                "groupId='" + sensor.getGroup().getId()+ "'," +
-                "bottomThreshold='" + sensor.getBottomThreshold() + "'," +
-                "topThreshold='" + sensor.getTopThreshold() + "';");
+        queryExecutor.execute("INSERT INTO  sensors (name, type, groupId, bottomThreshold, topThreshold) VALUES (" +
+                "'" + sensor.getName() + "'," +
+                "'" + sensor.getType().getId() + "'," +
+                "'" + sensor.getGroup().getId()+ "'," +
+                "'" + sensor.getBottomThreshold() + "'," +
+                "'" + sensor.getTopThreshold() + "');");
     }
 
     private Sensor wrapSensor(ResultSet resultSet) throws SQLException {
-        return new Sensor(resultSet.getInt("ss.id"),
-                resultSet.getString("ss.name"),
-                new SensorType(resultSet.getInt("ss.type"), resultSet.getString("t.name")),
-                new Group(resultSet.getInt("ss.groupId"), resultSet.getString("g.name")),
-                resultSet.getFloat("ss.topThreshold"),
-                resultSet.getFloat("ss.bottomThreshold"));
+        Sensor s = new Sensor();
+        s.setId(resultSet.getInt(1));
+        s.setName(resultSet.getString(2));
+        SensorType st = new SensorType();
+        st.setId(resultSet.getInt(3));
+        st.setName(resultSet.getString(10));
+        s.setType(st);
+        Group g = new Group();
+        g.setId(resultSet.getInt(4));
+        g.setName(resultSet.getString(8));
+        s.setGroup(g);
+        s.setBottomThreshold(resultSet.getFloat(5));
+        s.setTopThreshold(resultSet.getFloat(6));
+        return s;
     }
 }

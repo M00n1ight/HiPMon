@@ -35,6 +35,13 @@ dependencies {
 
     // SQLite3
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.7.2'
+
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-ribbon
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-ribbon', version: '1.0.0.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-feign
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.4.7.RELEASE'
+
 }
 
 dependencyManagement {

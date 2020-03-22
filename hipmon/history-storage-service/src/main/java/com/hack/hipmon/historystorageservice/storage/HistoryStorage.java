@@ -1,8 +1,6 @@
 package com.hack.hipmon.historystorageservice.storage;
 
-import com.hack.hipmon.historystorageservice.data.GroupModification;
 import com.hack.hipmon.historystorageservice.data.ModificationRecord;
-import com.hack.hipmon.historystorageservice.data.SensorModification;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -39,18 +37,11 @@ public class HistoryStorage {
         return records;
     }
 
-    public void createModification(SensorModification sensorModification) throws SQLException {
-        statement.execute("INSERT INTO history SET " +
-                "type='" + sensorModification.getType() + "'," +
-                "modification='" + sensorModification.getSensor().toString() + "'," +
-                "timestamp='" + sensorModification.getTimestamp() + "';");
-    }
-
-    public void createModification(GroupModification groupModification) throws SQLException {
-        statement.execute("INSERT INTO history SET " +
-                "type='" + groupModification.getType() + "'," +
-                "modification='" + groupModification.getGroup().toString() + "'," +
-                "timestamp='" + groupModification.getTimestamp() + "';");
+    public void createModification(ModificationRecord modificationRecord) throws SQLException {
+        statement.execute("INSERT INTO history (type, modification, timestamp) VALUES (" +
+                "'" + modificationRecord.getType() + "'," +
+                "'" + modificationRecord.getModification() + "'," +
+                "" + modificationRecord.getTimestamp() + ");");
     }
 
     private ModificationRecord wrapModificationRecord(ResultSet resultSet) throws SQLException {

@@ -1,6 +1,5 @@
 package com.hack.hipmon.configservice;
 
-import model.config.TestClass;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

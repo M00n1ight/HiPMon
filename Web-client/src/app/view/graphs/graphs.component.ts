@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ChartDataSets, ChartOptions} from 'chart.js';
 import {Color, Label} from 'ng2-charts';
 
@@ -8,6 +8,9 @@ import {Color, Label} from 'ng2-charts';
   styleUrls: ['./graphs.component.scss']
 })
 export class GraphsComponent implements OnInit {
+
+  @Input()
+  name = 'unknown';
 
   constructor() {
   }
@@ -21,7 +24,14 @@ export class GraphsComponent implements OnInit {
   public lineChartLabels: Label[] = ['1', '2', '3', '4', '1'];
   public lineChartOptions: ChartOptions = {
     spanGaps: true,
+    elements: {
+      point: {
+        pointStyle: 'line'
+      }
+    },
     tooltips: {
+      mode: 'nearest',
+      intersect: false,
       position: 'nearest',
     },
   };

@@ -14,3 +14,28 @@ router-outlet + * {
 app-header {
   height: 10vh;
 }
+
+.header {
+  color: #f1f1f1;
+  position: fixed;
+  width: 100%;
+  background: #C5CAE9;
+  /* margin-bottom: 10px; */
+  z-index: 999;
+}
+
+/* Page content */
+.content {
+  padding: 16px;
+
+  color: #f1f1f1;
+}
+
+/* The sticky class is added to the header with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  color: #f1f1f1;
+}

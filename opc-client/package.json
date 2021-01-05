@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "node-opcua": "^2.5.1",
     "node-opcua-client": "^2.5.1"
   },
